@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.description = "A Fluentd output plugin that validates utf8 byte sequences and escape non-valid utf8 characters."
   gem.summary     = "[A Fluentd output plugin that validates utf8 byte sequences and escape non-valid utf8 characters."
   gem.files       = ['lib/fluent/plugin/out_utf8_validator.rb']
-  gem.authors     = ["Charles Essien"]
+  gem.authors     = ["athenahealth"]
   gem.require_paths = ['lib']
   gem.license     = "Apache 2.0"
 end
