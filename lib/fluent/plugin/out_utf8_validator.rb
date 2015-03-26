@@ -2,12 +2,18 @@
 class Fluent::UTFValidator < Fluent::Output
 	Fluent::Plugin.register_output 'utf8_validator', self
 
-	config_param :append_tag_valid, :string, :default => nil		# If there were no invalid utf8 characters, optionally tag the output
-	config_param :append_tag_invalid, :string, :default => nil		# If there were found and escaped characters, append a tag indicating that it was modified
-	config_param :post_tag_prefix, :string, :default => 'validated' 	# A validated message will be re-emmited after processing with this top level tag.
-	config_param :deep_validate, :bool, :default => true			# Validate children embedded records on the JSON object
-	config_param :replacement_character, :string, :default => '??'		# Prepended escape character for non-valid characters
-	config_param :key_name, :string, :default => 'utf8_modified'		# A top level key name to store a boolean if the record has been modified
+  # If there were no invalid utf8 characters, optionally tag the output
+	config_param :append_tag_valid, :string, :default => nil
+  # If there were found and escaped characters, append a tag indicating that it was modified
+	config_param :append_tag_invalid, :string, :default => nil
+  # A validated message will be re-emmited after processing with this top level tag
+	config_param :post_tag_prefix, :string, :default => 'validated'
+  # Validate children embedded records on the JSON object
+	config_param :deep_validate, :bool, :default => true
+  # Prepended escape character for non-valid characters
+	config_param :replacement_character, :string, :default => '??'
+  # A top level key name to store a boolean if the record has been modified
+	config_param :key_name, :string, :default => 'utf8_modified'
 
 	def configure conf
 		super
@@ -91,7 +97,7 @@ class Fluent::UTFValidator < Fluent::Output
 				new_string = string
 			end
 		else
-			new_string = validate_string(string[0..midpoint]) + validate_string(string[midpoint+1..str_length-1])  
+			new_string = validate_string(string[0..midpoint]) + validate_string(string[midpoint+1..str_length-1])
 		end
 
 		new_string
