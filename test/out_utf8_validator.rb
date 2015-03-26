@@ -1,14 +1,14 @@
 require 'fluent/test'
-require 'fluent/plugin/out_record_modifier'
+require 'fluent/plugin/utf8_validator'
 
 
-class RecordModifierOutputTest < Test::Unit::TestCase
+class UTFValidatorTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
   end
 
   CONFIG = %[
-    type record_modifier
+    type utf8_validator
     tag foo.filtered
 
     gen_host ${hostname}
