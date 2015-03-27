@@ -1,3 +1,5 @@
+require 'fluent/plugin/out_record_modifier'
+
 # encoding: utf-8
 class Fluent::UTFValidator < Fluent::Output
   Fluent::Plugin.register_output 'utf8_validator', self
@@ -18,17 +20,17 @@ class Fluent::UTFValidator < Fluent::Output
   def configure conf
     super
     @invalidCharacterFound = false
-    end
+  end
 
-    def emit tag, es, chain
+  def emit tag, es, chain
     @invalidCharacterFound = false
 
-        es.each do |time, record|
+    es.each do |time, record|
       starttime = Time.now
-            new_record = validate_record record
+      new_record = validate_record record
 
-          if @invalidCharacterFound
-              # Emit a new tag to show utf8 characters have been escaped
+      if @invalidCharacterFound
+        # Emit a new tag to show utf8 characters have been escaped
         if(@append_tag_invalid)
           new_tag = "#{tag}.#{@append_tag_invalid}".sub(/^\./, '')
           log.warn "Invalid utf-8 characters found in record. appending #{@append_tag_invalid}"
@@ -46,18 +48,18 @@ class Fluent::UTFValidator < Fluent::Output
           new_tag = tag
         end
 
-            chain.next
-            end
+        chain.next
+      end
 
       new_tag = "#{@post_tag_prefix}.#{new_tag}"
       endtime = Time.now
       new_record['debug_record_time'] = endtime - starttime
-            Fluent::Engine.emit new_tag, time, new_record
-        end 
+      Fluent::Engine.emit new_tag, time, new_record
     end
+  end
 
   # Validate a string-type record for non-utf8 characters
-    def validate_record record
+  def validate_record record
     new_record = {}
 
     record.each do |key, value|
@@ -65,7 +67,7 @@ class Fluent::UTFValidator < Fluent::Output
         value = validate_string value
       end
 
-      # Recurse into child record 
+      # Recurse into child record
       if @deep_validate
         if value.is_a? Hash
           value = validate_record value
@@ -79,7 +81,7 @@ class Fluent::UTFValidator < Fluent::Output
 
     new_record
   end
-  
+
   # Recursively validate a string record and escape non-utf8 characters
   def validate_string string
     return string if string.valid_encoding?
@@ -102,4 +104,6 @@ class Fluent::UTFValidator < Fluent::Output
 
     new_string
   end
+
+  private
 end

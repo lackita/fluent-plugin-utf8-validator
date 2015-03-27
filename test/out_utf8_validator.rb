@@ -1,5 +1,5 @@
 require 'fluent/test'
-require 'fluent/plugin/utf8_validator'
+require 'fluent/plugin/out_utf8_validator'
 
 
 class UTFValidatorTest < Test::Unit::TestCase
